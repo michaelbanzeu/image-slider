@@ -1,14 +1,58 @@
-var slideIndex = 1;
-var slides = document.getElementsByClassName("my_slides");
+// Variables
+let slideIndex = 1;
+const slides = document.getElementsByClassName("my_slides");
+const nextArrow = document.querySelector('.next');
+const prevArrow = document.querySelector('.prev');
+const dots = document.getElementsByClassName("dot");
 
+
+// Calling functions
+showSlidesAuto();
+showSlides(slideIndex);
+prevArrow.addEventListener('click', () => {
+    slideIndex += -1;
+    showSlides(slideIndex);
+});
+
+nextArrow.addEventListener('click', () => {
+    slideIndex += 1;
+    showSlides(slideIndex);
+});
+
+
+// Functions
+// Auto slide
+slideIndex = 0;
+function showSlidesAuto() {
+    for (const slide of slides) {
+        slide.style.display = "none";
+    }
+    slideIndex++;
+    if (slideIndex > slides.length) {
+        slideIndex = 1;
+    }
+    slides[slideIndex - 1].style.display = "block";
+    dotsMoves();
+    setTimeout(showSlidesAuto, 5000);
+}
+
+// Moving the dots
 function dotsMoves() {
-    let dots = document.getElementsByClassName("dot");
-    for (let i = 0; i < dots.length; i++) {
-        dots[i].className = dots[i].className.replace(" active", "");
+    for (const dot of dots) {
+        dot.className = dot.className.replace(" active", "");
     }
     dots[slideIndex - 1].className += " active";
 }
 
+// Changing the slide by clicking on a specific dot
+for (let i = 0; i < dots.length; i++) {
+    dots[i].addEventListener('click', () => {
+        slideIndex = i + 1;
+        showSlides(slideIndex);
+    })
+}
+
+// Displaying images in the slide
 function showSlides(n) {
     if (n > slides.length) {
         slideIndex = 1;
@@ -16,39 +60,10 @@ function showSlides(n) {
     if (n < 1) {
         slideIndex = slides.length;
     }
-    for (let i = 0; i < slides.length; i++) {
-        slides[i].style.display = "none";
+    for (const slide of slides) {
+        slide.style.display = "none";
     }
     slides[slideIndex - 1].style.display = "block";
-    console.log(slideIndex);
 
     dotsMoves();
 }
-
-showSlides(slideIndex);
-
-function plusSlides(n) {
-    showSlides(slideIndex += n);
-}
-
-function currentSlide(n) {
-    showSlides(slideIndex = n);
-}
-
-// Auto slide
-slideIndex = 0;
-function showSlidesAuto() {
-    for (let i = 0; i < slides.length; i++) {
-        slides[i].style.display = "none";
-    }
-    slideIndex++;
-    if (slideIndex > slides.length) {
-        slideIndex = 1;
-    }
-    slides[slideIndex - 1].style.display = "block";
-    console.log(slideIndex);
-    dotsMoves();
-    setTimeout(showSlidesAuto, 5000);
-}
-
-showSlidesAuto();
